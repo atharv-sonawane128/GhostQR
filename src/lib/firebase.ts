@@ -14,7 +14,10 @@ const firebaseConfig = {
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app);
-
 const storage = getStorage(app);
-export { app, db, auth, storage };
+
+// Lazily initialize Auth so build-time module evaluation does not fail on routes
+// that never use authentication.
+const getFirebaseAuth = () => getAuth(app);
+
+export { app, db, storage, getFirebaseAuth };
